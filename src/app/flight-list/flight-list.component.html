@@ -1,0 +1,146 @@
+<div class="main-container">
+  <h1>Búsqueda Round Trip</h1>
+  <hr/>
+  <div class="row">
+    <div class="col-lg-9">
+      <div class="flight-list-container">
+        <div class="card" *ngFor="let flight of flights; let index = index"> 
+          <div class="row">
+            <div class="col-lg-1">
+              <img src={{flight?.carrierInfo.carrierLogo}}  alt="">
+            </div>
+            <div class="col-lg-11 text-center">
+              <h5>{{flight?.carrierInfo.carrierName}}</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-2">
+              <span><p>{{flight.totalPrice}}</p></span>
+            </div>
+            <div class="col-lg-2 offset-lg-8 text-center" >
+              <span><p>{{flight.numberOfStops}} Stop</p></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-3">
+              <div class="options-flight">
+                <span><p (click)="showDepartureOptions(flight)">{{flight.availableOptions}}</p></span>
+              </div>
+            </div>
+            <div class="col-lg-2 offset-lg-7 text-center">
+              <span *ngIf="flight.baggageAllowance > 0"><p><i class="fas fa-suitcase"></i></p></span>
+            </div>
+          </div>
+          <div class="flight-options-container" *ngIf="flight.flagAvailableOption">
+            <form [formGroup]="formFlightOption" id="formFlightOption">
+              <div class="flight-option" *ngFor="let flightOption of flight.flightOption;">
+                <div [ngClass]="(flightOption.key == originKey ? 'departure-flights' : 'return-flights hidden-all-return-flights')">
+                  <div class="option" *ngFor="let option of flightOption.option">
+                    <div class="segment" *ngFor="let segment of option.segment; let i = index;">
+                      <div class="row">
+                        <div class="col-lg-2">
+                          <div *ngIf="i == 0" class="option-check text-center">
+                            <div *ngIf="flightOption.key == originKey; else elseBlock">
+                              <input type="checkbox" 
+                                     value={{flight.key}}-{{flightOption.key}}-{{option.key}}
+                                     id="{{option.key}}" 
+                                     (click)="showReturnOptions($event)">
+                              <label for="{{option.key}}"></label>
+                            </div>
+                            <ng-template #elseBlock>
+                                <input type="checkbox" 
+                                       value={{flight.key}}-{{flightOption.key}}-{{option.key}}
+                                       id="{{option.key}}"
+                                       (click)="hiddenInactiveReturnOptions($event)">
+                                <label for="{{option.key}}"></label>
+                            </ng-template>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <span class="origin"><p>{{segment.origin}} - {{segment.arrivalTime}}</p></span>
+                        </div>
+                        <div class="col-lg-4">
+                          <span class="destination"><p>{{segment.destination}} - {{segment.departureTime}}</p></span>
+                        </div>
+                        <div class="col-lg-1">
+                          <span *ngIf="segment.numberOfPieces > 0"><p><i class="fas fa-suitcase"></i></p></span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-5 offset-lg-2">
+                          <span><p>Vuelo: {{segment.flightNumber}},  Clase: {{segment.BookingCode}}</p></span>
+                          <span><p>Duración del viaje: {{segment.flightTime}}</p></span>
+                          <span *ngIf="segment.operationCarrierName"><p>OC: {{segment?.operationCarrierName}}</p></span>
+                        </div>
+                        <div class="col-lg-5"></div>
+                      </div>
+                    </div><br/>
+                  </div>
+                </div>              
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="filters-container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h2>Filtros</h2>
+          </div>
+          <div class="col-lg-6 text-right">
+            <h3>{{numberFlightFilters}}/{{numberOfFlights}}</h3>
+            <p>Options</p>
+          </div>
+        </div>
+        <hr/>
+        <div class="stop-container">
+          <div class="row">
+            <div class="col">
+              <h4>Escalas</h4>
+            </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                <ul class="stop-list">
+                  <li *ngFor="let stop of optionsStops">
+                    <input type="checkbox"
+                           id="{{stop}}"                   
+                           (click)="filterByStop(stop)"
+                           checked >
+                    <label for="{{stop}}">{{stop}}</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </div>
+        <div class="suppliers-container">
+          <div class="row">
+            <div class="col">
+              <h4>Aereolineas</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <ul class="supplier-list">
+                <li *ngFor="let supplier of optionsCarriers">
+                  <input type="checkbox"
+                           id="{{supplier.key}}"
+                           (click)="filterBySupplier(supplier)"
+                           checked >
+                  <label for="{{supplier.key}}">{{supplier.carrierName}}</label>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+ 
+ 
