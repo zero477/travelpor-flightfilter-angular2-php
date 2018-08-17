@@ -24,7 +24,7 @@
           <div class="row">
             <div class="col-lg-3">
               <div class="options-flight">
-                <span><p (click)="showDepartureOptions(flight)">{{flight.availableOptions}}</p></span>
+                <span><p (click)="showDepartureOptions(flight)">{{flight.outboundOptions}}</p></span>
               </div>
             </div>
             <div class="col-lg-2 offset-lg-7 text-center">
@@ -36,45 +36,53 @@
               <div class="flight-option" *ngFor="let flightOption of flight.flightOption;">
                 <div [ngClass]="(flightOption.key == originKey ? 'departure-flights' : 'return-flights hidden-all-return-flights')">
                   <div class="option" *ngFor="let option of flightOption.option">
-                    <div class="segment" *ngFor="let segment of option.segment; let i = index;">
+                     <div class="segment" *ngFor="let segment of option.segment; let i = index;">
                       <div class="row">
-                        <div class="col-lg-2">
-                          <div *ngIf="i == 0" class="option-check text-center">
-                            <div *ngIf="flightOption.key == originKey; else elseBlock">
-                              <input type="checkbox" 
-                                     value={{flight.key}}-{{flightOption.key}}-{{option.key}}
-                                     id="{{option.key}}" 
-                                     (click)="showReturnOptions($event)">
-                              <label for="{{option.key}}"></label>
-                            </div>
-                            <ng-template #elseBlock>
-                                <input type="checkbox" 
-                                       value={{flight.key}}-{{flightOption.key}}-{{option.key}}
-                                       id="{{option.key}}"
-                                       (click)="hiddenInactiveReturnOptions($event)">
-                                <label for="{{option.key}}"></label>
-                            </ng-template>
-                          </div>
+                        <div class="col">
+                           <div class="row">
+                             <div class="col-lg-2">
+                                <div *ngIf="i == 0" class="option-check text-center">
+                                    <div *ngIf="flightOption.key == originKey; else elseBlock">
+                                      <input type="checkbox" 
+                                             value={{flight.key}}-{{flightOption.key}}-{{option.key}}
+                                             id="{{option.key}}" 
+                                             (click)="showReturnOptions($event)">
+                                      <label for="{{option.key}}"></label>
+                                      <span class="inbound-options-label"><p>{{flight.inboundOptions}} Available Inbound Options</p></span>
+                                    </div>
+                                    <ng-template #elseBlock>
+                                        <input type="checkbox" 
+                                               value={{flight.key}}-{{flightOption.key}}-{{option.key}}
+                                               id="{{option.key}}"
+                                               (click)="hiddenInactiveReturnOptions($event)">
+                                        <label for="{{option.key}}"></label>
+                                    </ng-template>
+                                  </div>
+                             </div>
+                             <div class="col-lg-10">
+                                <div class="row">
+                                  <div class="col-lg-4 offset-lg-1">
+                                    <span class="origin"><p>{{segment.origin}} - {{segment.arrivalTime}}</p></span>
+                                  </div>
+                                  <div class="col-lg-4">
+                                    <span class="destination"><p>{{segment.destination}} - {{segment.departureTime}}</p></span>
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <span *ngIf="segment.numberOfPieces > 0"><p><i class="fas fa-suitcase"></i></p></span>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-lg-5 offset-lg-1">
+                                    <span><p>Vuelo: {{segment.flightNumber}},  Clase: {{segment.BookingCode}}</p></span>
+                                    <span><p>Duración del viaje: {{segment.flightTime}}</p></span>
+                                    <span *ngIf="segment.operationCarrierName"><p>OC: {{segment?.operationCarrierName}}</p></span>
+                                  </div>
+                                </div>
+                              </div>
+                             </div><br/>
+                           </div>
                         </div>
-                        <div class="col-lg-4">
-                          <span class="origin"><p>{{segment.origin}} - {{segment.arrivalTime}}</p></span>
-                        </div>
-                        <div class="col-lg-4">
-                          <span class="destination"><p>{{segment.destination}} - {{segment.departureTime}}</p></span>
-                        </div>
-                        <div class="col-lg-1">
-                          <span *ngIf="segment.numberOfPieces > 0"><p><i class="fas fa-suitcase"></i></p></span>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-5 offset-lg-2">
-                          <span><p>Vuelo: {{segment.flightNumber}},  Clase: {{segment.BookingCode}}</p></span>
-                          <span><p>Duración del viaje: {{segment.flightTime}}</p></span>
-                          <span *ngIf="segment.operationCarrierName"><p>OC: {{segment?.operationCarrierName}}</p></span>
-                        </div>
-                        <div class="col-lg-5"></div>
-                      </div>
-                    </div><br/>
+                      </div><br/>                     
                   </div>
                 </div>              
               </div>

@@ -46,6 +46,12 @@
 }
 
 div {
+    &.option-check{
+        .inbound-options-label{
+            font-size: 15px;
+        }
+    }
+
     &.option-check,
     ul.stop-list,
     ul.supplier-list{

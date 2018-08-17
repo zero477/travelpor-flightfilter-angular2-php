@@ -167,9 +167,10 @@ export class FlightService {
         unitPrice: data[0],
         carrierInfo: data[1],
         flightOption: data[2],
-        availableOptions: data[3] +" options "+ this.routes[0].oriDes +" "+ data[4],
-        numberOfStops: data[5],
-        baggageAllowance: data[6]
+        outboundOptions: data[3] +" options "+ this.routes[0].oriDes +" "+ data[4],
+        inboundOptions: data[5],
+        numberOfStops: data[6],
+        baggageAllowance: data[7]
       }
     }
   }
@@ -197,7 +198,8 @@ export class FlightService {
     let bookingInfo: any;
     let carrierInfo: any;
     let fareInfo: string = "";
-    let availablOptions: number = 0;
+    let outboundOptions: number = 0;
+    let inboundOptions: number = 0;
     let numberOfStops: number;
     let departureDate: string = "";
 
@@ -241,7 +243,9 @@ export class FlightService {
                   
                   // Se calcula la cantidad de opciones de salida disponibles por cada aereolinea
                   if(flightOption[i].atributos.LegRef == this.routes[0].key){
-                     availablOptions += 1;                   
+                     outboundOptions += 1;                   
+                  }else{
+                    inboundOptions += 1;
                   }
 
                   // Se accede a las opciones por opcion de de vuelo. (segmentos de vuelo)
@@ -298,7 +302,7 @@ export class FlightService {
     // Se envia el numero de para para ser almacenado.
     this.storeOptionStop(numberOfStops);
     // Se retorna un array con la siguiente información.
-    return [unitPrice, carrierInfo, infoOption, availablOptions, departureDate, numberOfStops, parseInt(fareInfo)];
+    return [unitPrice, carrierInfo, infoOption, outboundOptions, departureDate, inboundOptions, numberOfStops, parseInt(fareInfo)];
   }
 
   // Retorna la información de un segmento de vuelo en especifico usando como parametro el key de un segmento de vuelo.
